@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types';
 import { Loading } from './Loading';
-import { AuthLayout, AuthNav, NonAuthLayout } from './AuthLayout';
+import { AuthLayout, NonAuthLayout } from './AuthLayout';
 import { AUTH_STATES } from '../utils/authUtils';
 import { useAuthCheck } from '../hooks/useAuthCheck';
 
 export const ProtectedRoute = ({ children, requiredRole }) => {
-  const { state, userInfo } = useAuthCheck(requiredRole);
+  const { state } = useAuthCheck(requiredRole);
 
   if (state === AUTH_STATES.LOADING) {
     return <Loading />;
@@ -21,11 +22,16 @@ export const ProtectedRoute = ({ children, requiredRole }) => {
   if (state === AUTH_STATES.UNAUTHORIZED) {
     return (
       <AuthLayout title="Access Denied">
-        <p>Sorry, you don't have permission to access this page.</p>
+        <p>Sorry, you don&apos;t have permission to access this page.</p>
         {/* <AuthNav /> */}
       </AuthLayout>
     );
   }
 
   return children;
+};
+
+ProtectedRoute.propTypes = {
+  children: PropTypes.node.isRequired,
+  requiredRole: PropTypes.string
 };
